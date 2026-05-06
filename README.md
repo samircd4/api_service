@@ -1,6 +1,6 @@
 # File Management API
 
-A FastAPI-based file management server for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling.
+A FastAPI-based file management server built by **Dr Python Solutions** for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling.
 
 ## Features
 
@@ -30,7 +30,28 @@ A FastAPI-based file management server for uploading, downloading, and managing 
 cd api_service
 ```
 
-### 2. Create a virtual environment (recommended)
+### 2. Install dependencies (recommended: using `uv`)
+
+```bash
+# Using uv package manager (recommended)
+uv run main.py
+```
+
+**Alternative: Using pip**
+
+```bash
+pip install -e .
+```
+
+Or install individual packages:
+
+```bash
+pip install fastapi uvicorn python-dotenv python-multipart rich
+```
+
+### 3. Create a virtual environment (optional)
+
+If you prefer an isolated virtual environment:
 
 ```bash
 # Using venv
@@ -43,16 +64,12 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+Then install dependencies:
 
 ```bash
+uv install
+# or
 pip install -e .
-```
-
-Or install individual packages:
-
-```bash
-pip install fastapi uvicorn python-dotenv python-multipart rich
 ```
 
 ## Configuration
@@ -72,13 +89,13 @@ MAX_FILE_SIZE_MB=50
 
 ### Configuration Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `HOST` | `0.0.0.0` | Server host address (0.0.0.0 for all interfaces) |
-| `PORT` | `8080` | Server port number |
-| `RELOAD` | `false` | Auto-reload on code changes (use `true` for development) |
-| `UPLOAD_DIR` | `uploads` | Directory to store uploaded files |
-| `MAX_FILE_SIZE_MB` | `50` | Maximum file size in megabytes |
+| Variable           | Default   | Description                                              |
+| ------------------ | --------- | -------------------------------------------------------- |
+| `HOST`             | `0.0.0.0` | Server host address (0.0.0.0 for all interfaces)         |
+| `PORT`             | `8080`    | Server port number                                       |
+| `RELOAD`           | `false`   | Auto-reload on code changes (use `true` for development) |
+| `UPLOAD_DIR`       | `uploads` | Directory to store uploaded files                        |
+| `MAX_FILE_SIZE_MB` | `50`      | Maximum file size in megabytes                           |
 
 ## Running the Server
 
@@ -97,6 +114,7 @@ RELOAD=true
 ```
 
 Then run:
+
 ```bash
 python main.py
 ```
@@ -132,6 +150,7 @@ http://localhost:8080
 Returns API information and available endpoints.
 
 **Response (200 OK)**
+
 ```json
 {
   "name": "File Management API",
@@ -148,6 +167,7 @@ Returns API information and available endpoints.
 ```
 
 **Example**
+
 ```bash
 curl http://localhost:8080/
 ```
@@ -161,6 +181,7 @@ curl http://localhost:8080/
 Check server health status and configuration.
 
 **Response (200 OK)**
+
 ```json
 {
   "status": "healthy",
@@ -170,6 +191,7 @@ Check server health status and configuration.
 ```
 
 **Example**
+
 ```bash
 curl http://localhost:8080/health
 ```
@@ -183,10 +205,12 @@ curl http://localhost:8080/health
 Upload a CSV file to the server.
 
 **Request**
+
 - **Content-Type**: `multipart/form-data`
 - **Body Parameter**: `file` (file input)
 
 **Response (201 Created)**
+
 ```json
 {
   "message": "File uploaded successfully",
@@ -198,21 +222,23 @@ Upload a CSV file to the server.
 
 **Error Responses**
 
-| Status | Description |
-|--------|-------------|
-| `400` | Invalid filename, wrong file type, or file too large |
-| `413` | File exceeds maximum size limit |
-| `500` | Server error during upload |
+| Status | Description                                          |
+| ------ | ---------------------------------------------------- |
+| `400`  | Invalid filename, wrong file type, or file too large |
+| `413`  | File exceeds maximum size limit                      |
+| `500`  | Server error during upload                           |
 
 **Examples**
 
 Using curl:
+
 ```bash
 curl -X POST "http://localhost:8080/upload-csv" \
   -F "file=@data.csv"
 ```
 
 Using Python requests:
+
 ```python
 import requests
 
@@ -226,16 +252,17 @@ with open("data.csv", "rb") as f:
 ```
 
 Using fetch (JavaScript):
+
 ```javascript
 const formData = new FormData();
 formData.append("file", fileInput.files[0]);
 
 fetch("http://localhost:8080/upload-csv", {
   method: "POST",
-  body: formData
+  body: formData,
 })
-.then(response => response.json())
-.then(data => console.log(data));
+  .then((response) => response.json())
+  .then((data) => console.log(data));
 ```
 
 ---
@@ -247,10 +274,12 @@ fetch("http://localhost:8080/upload-csv", {
 Upload a JSON file to the server.
 
 **Request**
+
 - **Content-Type**: `multipart/form-data`
 - **Body Parameter**: `file` (file input)
 
 **Response (201 Created)**
+
 ```json
 {
   "message": "File uploaded successfully",
@@ -262,21 +291,23 @@ Upload a JSON file to the server.
 
 **Error Responses**
 
-| Status | Description |
-|--------|-------------|
-| `400` | Invalid filename, wrong file type, or file too large |
-| `413` | File exceeds maximum size limit |
-| `500` | Server error during upload |
+| Status | Description                                          |
+| ------ | ---------------------------------------------------- |
+| `400`  | Invalid filename, wrong file type, or file too large |
+| `413`  | File exceeds maximum size limit                      |
+| `500`  | Server error during upload                           |
 
 **Examples**
 
 Using curl:
+
 ```bash
 curl -X POST "http://localhost:8080/upload-json" \
   -F "file=@data.json"
 ```
 
 Using Python requests:
+
 ```python
 import requests
 
@@ -298,6 +329,7 @@ with open("data.json", "rb") as f:
 Retrieve a list of all uploaded files with metadata.
 
 **Response (200 OK)**
+
 ```json
 {
   "files": [
@@ -322,18 +354,20 @@ Retrieve a list of all uploaded files with metadata.
 
 **Error Responses**
 
-| Status | Description |
-|--------|-------------|
-| `500` | Server error while listing files |
+| Status | Description                      |
+| ------ | -------------------------------- |
+| `500`  | Server error while listing files |
 
 **Examples**
 
 Using curl:
+
 ```bash
 curl http://localhost:8080/list-files
 ```
 
 Using Python requests:
+
 ```python
 import requests
 
@@ -354,26 +388,28 @@ Download a file from the server.
 
 **Path Parameters**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type   | Description                                     |
+| ---------- | ------ | ----------------------------------------------- |
 | `filename` | string | Name of the file to download (e.g., `data.csv`) |
 
 **Response (200 OK)**
+
 - Returns the file with appropriate `Content-Type` header
 - CSV files: `Content-Type: text/csv`
 - JSON files: `Content-Type: application/json`
 
 **Error Responses**
 
-| Status | Description |
-|--------|-------------|
-| `400` | Invalid filename or path traversal attempt |
-| `404` | File not found |
-| `500` | Server error during download |
+| Status | Description                                |
+| ------ | ------------------------------------------ |
+| `400`  | Invalid filename or path traversal attempt |
+| `404`  | File not found                             |
+| `500`  | Server error during download               |
 
 **Examples**
 
 Using curl:
+
 ```bash
 # Download and save file
 curl -O http://localhost:8080/download/data.csv
@@ -383,6 +419,7 @@ curl http://localhost:8080/download/data.csv -o my_data.csv
 ```
 
 Using Python requests:
+
 ```python
 import requests
 
@@ -397,10 +434,11 @@ else:
 ```
 
 Using fetch (JavaScript):
+
 ```javascript
 fetch("http://localhost:8080/download/data.csv")
-  .then(response => response.blob())
-  .then(blob => {
+  .then((response) => response.blob())
+  .then((blob) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -419,11 +457,12 @@ Delete a file from the server.
 
 **Path Parameters**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type   | Description                                   |
+| ---------- | ------ | --------------------------------------------- |
 | `filename` | string | Name of the file to delete (e.g., `data.csv`) |
 
 **Response (200 OK)**
+
 ```json
 {
   "message": "File deleted successfully: data.csv"
@@ -432,20 +471,22 @@ Delete a file from the server.
 
 **Error Responses**
 
-| Status | Description |
-|--------|-------------|
-| `400` | Invalid filename or path traversal attempt |
-| `404` | File not found |
-| `500` | Server error during deletion |
+| Status | Description                                |
+| ------ | ------------------------------------------ |
+| `400`  | Invalid filename or path traversal attempt |
+| `404`  | File not found                             |
+| `500`  | Server error during deletion               |
 
 **Examples**
 
 Using curl:
+
 ```bash
 curl -X DELETE "http://localhost:8080/delete/data.csv"
 ```
 
 Using Python requests:
+
 ```python
 import requests
 
@@ -458,12 +499,13 @@ else:
 ```
 
 Using fetch (JavaScript):
+
 ```javascript
 fetch("http://localhost:8080/delete/data.csv", {
-  method: "DELETE"
+  method: "DELETE",
 })
-.then(response => response.json())
-.then(data => console.log(data["message"]));
+  .then((response) => response.json())
+  .then((data) => console.log(data["message"]));
 ```
 
 ---
@@ -471,14 +513,17 @@ fetch("http://localhost:8080/delete/data.csv", {
 ## File Constraints
 
 ### Allowed File Types
+
 - **.csv** - CSV (Comma-Separated Values) files
 - **.json** - JSON (JavaScript Object Notation) files
 
 ### Size Limits
+
 - **Default**: 50 MB per file
 - **Configurable**: Set `MAX_FILE_SIZE_MB` in `.env`
 
 ### Security Validations
+
 - Filenames must not be empty
 - Path traversal attacks prevented (`..`, `/`, `\` not allowed)
 - File extension validation enforced
@@ -491,6 +536,7 @@ The API returns standard HTTP status codes with descriptive error messages.
 ### Common Error Responses
 
 **400 Bad Request**
+
 ```json
 {
   "detail": "Invalid file type. Allowed: .csv, .json"
@@ -498,6 +544,7 @@ The API returns standard HTTP status codes with descriptive error messages.
 ```
 
 **404 Not Found**
+
 ```json
 {
   "detail": "File not found: unknown.csv"
@@ -505,6 +552,7 @@ The API returns standard HTTP status codes with descriptive error messages.
 ```
 
 **413 Payload Too Large**
+
 ```json
 {
   "detail": "File too large. Maximum size: 50MB"
@@ -512,11 +560,16 @@ The API returns standard HTTP status codes with descriptive error messages.
 ```
 
 **500 Internal Server Error**
+
 ```json
 {
   "detail": "Upload failed: [error details]"
 }
 ```
+
+---
+
+> Built and maintained by **Dr Python Solutions** — your trusted Python partner and footprint in every project.
 
 ## CORS Configuration
 
@@ -530,6 +583,7 @@ allow_headers=["*"]  # All headers allowed
 ```
 
 **Note**: In production, restrict `allow_origins` to specific domains:
+
 ```python
 allow_origins=[
     "https://example.com",
@@ -542,6 +596,7 @@ allow_origins=[
 ### Complete Upload and Download Workflow
 
 **Python**
+
 ```python
 import requests
 import json
@@ -592,6 +647,7 @@ print(response.json())
 ```
 
 **JavaScript/Fetch**
+
 ```javascript
 const baseURL = "http://localhost:8080";
 
@@ -613,11 +669,11 @@ async function listFiles() {
 async function uploadFile(file, type = "csv") {
   const formData = new FormData();
   formData.append("file", file);
-  
+
   const endpoint = type === "csv" ? "/upload-csv" : "/upload-json";
   const response = await fetch(`${baseURL}${endpoint}`, {
     method: "POST",
-    body: formData
+    body: formData,
   });
   const data = await response.json();
   console.log("Upload response:", data);
@@ -627,7 +683,7 @@ async function uploadFile(file, type = "csv") {
 async function downloadFile(filename) {
   const response = await fetch(`${baseURL}/download/${filename}`);
   const blob = await response.blob();
-  
+
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -639,7 +695,7 @@ async function downloadFile(filename) {
 // 5. Delete file
 async function deleteFile(filename) {
   const response = await fetch(`${baseURL}/delete/${filename}`, {
-    method: "DELETE"
+    method: "DELETE",
   });
   const data = await response.json();
   console.log("Delete response:", data);
@@ -660,6 +716,7 @@ The server uses the `rich` library for colored console output:
 - ✗ (Red) - Errors and failures
 
 Example output:
+
 ```
 ✓ Upload directory: C:\path\to\uploads
 ✓ Max file size: 50MB
@@ -672,23 +729,29 @@ Example output:
 ## Troubleshooting
 
 ### Issue: "Address already in use"
+
 **Solution**: Change the `PORT` in `.env` or kill the process using the current port.
 
 ### Issue: "Permission denied" on uploads
+
 **Solution**: Ensure the `UPLOAD_DIR` folder exists and has write permissions.
 
 ### Issue: "Module not found"
+
 **Solution**: Ensure all dependencies are installed: `pip install -e .`
 
 ### Issue: CORS errors in browser
+
 **Solution**: CORS is already enabled. Check that your client is sending requests to the correct domain.
 
 ### Issue: File not found after upload
+
 **Solution**: Verify the `UPLOAD_DIR` path in `.env` is correct and the file was successfully uploaded (check the response).
 
 ## Development
 
 ### Project Structure
+
 ```
 api_service/
 ├── main.py              # Main application file
@@ -699,7 +762,9 @@ api_service/
 ```
 
 ### Code Style
+
 The project uses:
+
 - Type hints for all functions
 - Comprehensive docstrings
 - Pydantic models for request/response validation
@@ -721,6 +786,7 @@ async def custom_endpoint():
 ### Recommended Settings for Production
 
 **.env**
+
 ```env
 HOST=0.0.0.0
 PORT=8080
@@ -763,6 +829,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
 
 Build and run:
+
 ```bash
 docker build -t file-api .
 docker run -p 8080:8080 -v $(pwd)/uploads:/app/uploads file-api
@@ -788,6 +855,8 @@ This project is part of the Pamass project.
 For issues, questions, or contributions, please refer to the main project repository.
 
 ---
+
+> Built and maintained by **Dr Python Solutions** — your trusted Python partner and footprint in every project.
 
 **Version**: 1.0.0  
 **Last Updated**: May 5, 2026  
