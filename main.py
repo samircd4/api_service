@@ -1,7 +1,7 @@
 """
 FastAPI File Management Server
 
-A simple file upload/download server supporting CSV and JSON files.
+A FastAPI-based file management server built by Dr Python Solutions for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling.
 """
 
 import os
@@ -61,7 +61,7 @@ class HealthResponse(BaseModel):
 # Initialize FastAPI app (without lifespan for now to avoid issues)
 app = FastAPI(
     title="File Management API",
-    description="Upload, download, and manage CSV and JSON files",
+    description='A FastAPI-based file management server built by <b><i><a href="https://drpythonsolutions.netlify.app" target="_blank">Dr Python Solutions</a></i></b> for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling.',
     version="1.0.0"
 )
 
@@ -146,7 +146,7 @@ def get_file_info(filepath: Path) -> Dict[str, Any]:
 
 @app.get("/", tags=["General"])
 async def root():
-    """Root endpoint with API information."""
+    """A FastAPI-based file management server built by Dr Python Solutions for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling."""
     return {
         "name": "File Management API",
         "version": "1.0.0",

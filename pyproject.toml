@@ -1,7 +1,7 @@
 [project]
 name = "api-service"
 version = "0.1.0"
-description = "Add your description here"
+description = "A FastAPI-based file management server built by Dr Python Solutions for uploading, downloading, and managing CSV and JSON files with built-in validation, security features, and comprehensive error handling."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
